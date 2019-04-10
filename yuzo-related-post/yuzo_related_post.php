@@ -4,7 +4,7 @@ Plugin Name: Related Posts
 Plugin URI: https://wordpress.org/plugins/yuzo-related-post/
 Description: Related posts so easy and fast
 Tags: related posts,related post,related content,popular posts,last post, most views, widget,related page,content,associate page, associate post
-Version: 5.12.70
+Version: 5.12.71
 Author: iLen
 Author URI: http://ilentheme.com
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd =_s-xclick&hosted_button_id=MSRAUBMB5BZFU
@@ -169,6 +169,9 @@ function create_post_related( $content = '' ){
 
 	// verify
 	if( self::only_specific_post() == false ) return $content;
+
+	// validate if private post for no show 'related post'
+	if( $post->post_status == 'private' ) return $content;
 
 
 	$style          = "";
@@ -811,9 +814,11 @@ function create_post_related( $content = '' ){
 			$post_into_manual_fecth = false;
 			$post_into_count        = 0;
 			$post_i 				= 0; // counter post show, effective
+			$post_private_manual    = false; // // Validate if manual post and private post
             
             
 			while ( (is_object($the_query_yuzo) && $the_query_yuzo->have_posts()) || $counter_manual_post >= $metabox_add_post_first ) :
+				$post_private_manual = false;
 				// $myquery->found_posts
 				// $the_query_yuzo->request; // view query sql
 				//  START custom first post
@@ -828,6 +833,10 @@ function create_post_related( $content = '' ){
                         $post_into_manual++;
                         if( $post_into_manual > $number_post ){ break; }
                         $post = get_post( $post_id );
+
+                        // Validate if manual post and private post
+                        if( is_object($post) && $post->post_status == 'private' ) $post_private_manual = true;
+                        //var_dump($post);
                     }elseif($the_query_yuzo->have_posts() && $wp_query->post_count != 0){
 						$the_query_yuzo->the_post(); // END custom first post
 					}
@@ -863,8 +872,10 @@ function create_post_related( $content = '' ){
                 $post_i++;
  
 
-
-
+                // Validate if manual post and private post
+                if( $post_private_manual == true ){
+                	continue;
+                }
 
 
 

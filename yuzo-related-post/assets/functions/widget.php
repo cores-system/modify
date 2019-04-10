@@ -78,6 +78,7 @@ function __construct(){
 											'type_image'                    => 'rectangular',
 											'title_position'                => '1',
 											'categories'                    => array('-1'),
+											'title_tag'						=> 'h3',
 											);
 
 
@@ -129,6 +130,7 @@ function __construct(){
 									'type_image'                    => 's',
 									'title_position'                => 's',
 									'categories'                    => 'a',
+									'title_tag'						=> 's',
 								 );
 
 
@@ -175,7 +177,16 @@ function form($instance){
 																			'id'    =>$this->get_field_id('title'),
 																			'name'  =>$this->get_field_name('title'),
 																			'class' =>'',
-																	  
+																			'row'   =>array('a','b')),
+
+																	array(  'title' =>__('Title tag',$this->parameter['name_option']),
+																			'help'  =>__('Choose the title tag according to your SEO approach',$this->parameter['name_option']),
+																			'type'  =>'select',
+																			'items' =>array( 'h3' =>'&#x3C;h3 /&#x3E;','h4' => '&#x3C;h4 /&#x3E;' ),
+																			'value' =>$title_tag,
+																			'id'    =>$this->get_field_id('title_tag'),
+																			'name'  =>$this->get_field_name('title_tag'),
+																			'class' =>'',
 																			'row'   =>array('a','b')),
 
 																	array(  'title' =>__('Number Post',$this->parameter['name_option']),
@@ -923,8 +934,11 @@ function widget($args,$instance){
 	}
  
 
+	// Widget title tag
+	$tag_title_widget = isset($yuzo_option_widget->title_tag) && $yuzo_option_widget->title_tag == 'h3' ? 'h3' : 'h4';
+
 	$_html = "";
-	$_html = "<div id='{$args['widget_id']}' class='widget yuzo_widget_wrap'><h3 class='widget-title'><span>".$if_utils->IF_setHtml($yuzo_option_widget->title)."</span></h3>";
+	$_html = "<div id='{$args['widget_id']}' class='widget yuzo_widget_wrap'><{$tag_title_widget} class='widget-title'><span>".$if_utils->IF_setHtml($yuzo_option_widget->title)."</span></{$tag_title_widget}>";
 	$_html .= "<div class='yuzo_related_post_widget style-$yuzo_option_widget->style'  data-version='{$YUZO_CORE->parameter["version"]}' >";
 
 

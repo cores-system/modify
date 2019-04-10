@@ -211,7 +211,7 @@ function IF_get_result_post_via_ajax(){
 
 	$args = array(
 		'post_type'      => $query_post_types,
-		'post_status'    => 'publish',
+		'post_status'    => array('publish','private'),
 		'posts_per_page' => 50,
 		//'s'				 => $term,
 		//'suppress_filters' => false

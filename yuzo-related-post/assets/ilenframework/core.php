@@ -3988,6 +3988,7 @@ if( $value_stored ){
 		$args = array(
 			'post_type'      => $query_post_types,
 			'post__in'       => $posts_real_id,
+			'post_status'    => array('publish','private'),
 			'orderby'        => 'post__in',
 			'posts_per_page' => -1
 		);
@@ -3997,12 +3998,13 @@ if( $value_stored ){
 		$found_posts = array();
 		if ($get_posts) {
 
-			$image = null;
+			$image       = null;
+			$status_post = null;
 			foreach ($get_posts as $_post) {
-
-				$image = $if_utils->IF_get_image('thumbnail',$this->parameter['default_image'],$_post->ID);
-				$text = $if_utils->IF_cut_text(get_the_title($_post->ID),75);
-				$_html_select2 .= "<li id='li_select2_item_{$_post->ID}'><img src='{$image['src']}'  /> $text <span class='select2_list_close select2_list_close{$_post->ID}' data-id='{$_post->ID}' onclick='delete_select2_to_dragdrop_{$value['name']}({$_post->ID})'>✕</span></li>";
+				$status_post = $_post->post_status == 'private' ? '<strong>Private: </strong>' : '';
+				$image       = $if_utils->IF_get_image('thumbnail',$this->parameter['default_image'],$_post->ID);
+				$text        = $if_utils->IF_cut_text(get_the_title($_post->ID),75);
+				$_html_select2 .= "<li id='li_select2_item_{$_post->ID}'><img src='{$image['src']}'  /> $status_post $text <span class='select2_list_close select2_list_close{$_post->ID}' data-id='{$_post->ID}' onclick='delete_select2_to_dragdrop_{$value['name']}({$_post->ID})'>✕</span></li>";
 
 			}
 
